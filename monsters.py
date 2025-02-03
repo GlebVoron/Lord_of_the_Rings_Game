@@ -4,6 +4,7 @@
 from pygame import *
 import baze
 import os
+from baze import *
 
 MONSTER_WIDTH = 32
 MONSTER_HEIGHT = 32

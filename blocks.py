@@ -106,4 +106,3 @@ class Princess(Platform):
     def update(self):
         self.image.fill(Color(PLATFORM_COLOR))
         self.boltAnim.blit(self.image, (0, 0))
-

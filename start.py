@@ -4,6 +4,7 @@ from pygame import *
 from player import *
 from blocks import *
 from monsters import *
+from baze import *
 
 # Объявляем переменные
 WIN_WIDTH = 1000  # Ширина создаваемого окна
@@ -42,7 +43,7 @@ def camera_configure(camera, target_rect):
 def loadLevel():
     global playerX, playerY  # объявляем глобальные переменные, это координаты героя
 
-    levelFile = open('%s/levels/1.txt' % FILE_DIR)
+    levelFile = open('%s/levels/level.txt' % FILE_DIR)
     line = " "
     commands = []
     while line[0] != "/":  # пока не нашли символ завершения файла
