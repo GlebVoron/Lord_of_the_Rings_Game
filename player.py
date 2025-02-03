@@ -1,8 +1,9 @@
 from pygame import *
 import pyganim
 import os
-import blocks
-import monsters
+from blocks import *
+from monsters import *
+from baze import *
 
 MOVE_SPEED = 7
 MOVE_EXTRA_SPEED = 2.5  # ускорение

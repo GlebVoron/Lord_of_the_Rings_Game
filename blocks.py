@@ -3,7 +3,7 @@
 
 from pygame import *
 import os
-import baze
+from baze import *
 
 PLATFORM_WIDTH = 32
 PLATFORM_HEIGHT = 32
@@ -93,3 +93,15 @@ class BlockTeleport(Platform):
         self.boltAnim.blit(self.image, (0, 0))
 
 
+class Princess(Platform):
+    def __init__(self, x, y):
+        Platform.__init__(self, x, y)
+        boltAnim = []
+        for anim in ANIMATION_PRINCESS:
+            boltAnim.append((anim, 0.8))
+        self.boltAnim = pyganim.PygAnimation(boltAnim)
+        self.boltAnim.play()
+
+    def update(self):
+        self.image.fill(Color(PLATFORM_COLOR))
+        self.boltAnim.blit(self.image, (0, 0))
