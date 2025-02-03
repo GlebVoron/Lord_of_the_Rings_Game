@@ -85,7 +85,7 @@ class BlockTeleport(Platform):
         boltAnim = []
         for anim in ANIMATION_BLOCKTELEPORT:
             boltAnim.append((anim, 0.3))
-        self.boltAnim = pyganim.PygAnimation(boltAnim)
+        self.boltAnim = baze.PygAnimation(boltAnim)
         self.boltAnim.play()
 
     def update(self):
@@ -99,7 +99,8 @@ class Princess(Platform):
         boltAnim = []
         for anim in ANIMATION_PRINCESS:
             boltAnim.append((anim, 0.8))
-        self.boltAnim = pyganim.PygAnimation(boltAnim)
+
+        self.boltAnim = baze.PygAnimation(boltAnim)
         self.boltAnim.play()
 
     def update(self):
