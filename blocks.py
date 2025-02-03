@@ -13,12 +13,12 @@ PLATFORM_COLOR = "#000000"
 ICON_DIR = os.path.dirname(__file__)  # Полный путь к каталогу с файлами
 
 ANIMATION_BLOCKTELEPORT = [
-    ('%s/blocks/portal2.png' % ICON_DIR),
-    ('%s/blocks/portal1.png' % ICON_DIR)]
+    ('%s/blocks/platform.png' % ICON_DIR),
+    ('%s/blocks/platform.png' % ICON_DIR)]
 
 ANIMATION_PRINCESS = [
-    ('%s/blocks/princess_l.png' % ICON_DIR),
-    ('%s/blocks/princess_r.png' % ICON_DIR)]
+    ('%s/blocks/platform.png' % ICON_DIR),
+    ('%s/blocks/platform.png' % ICON_DIR)]
 
 
 class Platform(sprite.Sprite):

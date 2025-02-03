@@ -1,6 +1,4 @@
 import pygame, time
-import pyganim
-from baze import *
 
 PLAYING = 'playing'
 PAUSED = 'paused'
