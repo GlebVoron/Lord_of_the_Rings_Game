@@ -31,7 +31,7 @@ class Monster(sprite.Sprite):
         boltAnim = []
         for anim in ANIMATION_MONSTERHORYSONTAL:
             boltAnim.append((anim, 0.3))
-        self.boltAnim = pyganim.PygAnimation(boltAnim)
+        self.boltAnim = baze.PygAnimation(boltAnim)
         self.boltAnim.play()
 
     def update(self, platforms):  # по принципу героя
