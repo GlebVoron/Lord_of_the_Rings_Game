@@ -122,6 +122,11 @@ def main():
                 f = Forest(x, y)
                 entities.add(f)
                 platforms.append(f)
+            if col == "P":
+                pr = Princess(x, y)
+                entities.add(pr)
+                platforms.append(pr)
+                animatedEntities.add(pr)
 
             x += PLATFORM_WIDTH  # блоки платформы ставятся на ширине блоков
         y += PLATFORM_HEIGHT  # то же самое и с высотой
