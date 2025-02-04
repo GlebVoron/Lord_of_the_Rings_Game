@@ -12,7 +12,11 @@ DISPLAY = (WIN_WIDTH, WIN_HEIGHT)  # Группируем ширину и выс
 BACKGROUND_COLOR = '#0aafd0'
 
 FILE_DIR = os.path.dirname(__file__)
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+pygame.mixer.music.load("music/1.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 
 class Camera(object):
     def __init__(self, camera_func, width, height):
