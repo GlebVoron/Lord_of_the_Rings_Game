@@ -4,15 +4,24 @@ from pygame import *
 from player import *
 from blocks import *
 from monsters import *
-from baze import *
+import sys
+import pygame.mixer
+import pygame.camera
+from pygame.locals import *
 
 # Объявляем переменные
 WIN_WIDTH = 1000  # Ширина создаваемого окна
-WIN_HEIGHT = 840  # Высота
+WIN_HEIGHT = 700  # Высота
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)  # Группируем ширину и высоту в одну переменную
 BACKGROUND_COLOR = '#0aafd0'
+pygame.mixer.init()
 
 FILE_DIR = os.path.dirname(__file__)
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+pygame.mixer.music.load("music/1.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 
 
 class Camera(object):
@@ -118,6 +127,11 @@ def main():
                 f = Forest(x, y)
                 entities.add(f)
                 platforms.append(f)
+            if col == "P":
+                pr = Princess(x, y)
+                entities.add(pr)
+                platforms.append(pr)
+                animatedEntities.add(pr)
 
             x += PLATFORM_WIDTH  # блоки платформы ставятся на ширине блоков
         y += PLATFORM_HEIGHT  # то же самое и с высотой
@@ -169,3 +183,5 @@ monsters = pygame.sprite.Group()  # Все передвигающиеся объ
 platforms = []  # то, во что мы будем врезаться или опираться
 if __name__ == "__main__":
     main()
+
+
