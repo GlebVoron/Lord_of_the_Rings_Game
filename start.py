@@ -8,6 +8,7 @@ import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
+import time
 
 # Объявляем переменные
 WIN_WIDTH = 1000  # Ширина создаваемого окна
@@ -18,10 +19,6 @@ pygame.mixer.init()
 
 FILE_DIR = os.path.dirname(__file__)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-pygame.mixer.music.load("music/1.mp3")
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
 
 
 class Camera(object):
@@ -84,6 +81,12 @@ def loadLevel():
 
 
 def main():
+    pygame.mixer.music.load("music/1.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+
+    time_start = time.time()
+
     loadLevel()
     pygame.init()  # Инициация PyGame, обязательная строчка
     screen = pygame.display.set_mode(DISPLAY)  # Создаем окошко
@@ -146,6 +149,8 @@ def main():
         timer.tick(60)
         for e in pygame.event.get():  # Обрабатываем события
             if e.type == QUIT:
+                time_stop = time.time()
+                os.system('python menu_stop.py')
                 raise SystemExit
             if e.type == KEYDOWN and e.key == K_UP:
                 up = True
@@ -183,5 +188,3 @@ monsters = pygame.sprite.Group()  # Все передвигающиеся объ
 platforms = []  # то, во что мы будем врезаться или опираться
 if __name__ == "__main__":
     main()
-
-
