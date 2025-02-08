@@ -9,6 +9,7 @@ import pygame.mixer
 import pygame.camera
 from pygame.locals import *
 import time
+import menu_stop
 
 # Объявляем переменные
 WIN_WIDTH = 1000  # Ширина создаваемого окна
@@ -150,7 +151,10 @@ def main():
         for e in pygame.event.get():  # Обрабатываем события
             if e.type == QUIT:
                 time_stop = time.time()
-                os.system('python menu_stop.py')
+                SCREEN_WIDTH = 800
+                SCREEN_HEIGHT = 600
+                screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                menu_stop.main_menu()
                 raise SystemExit
             if e.type == KEYDOWN and e.key == K_UP:
                 up = True

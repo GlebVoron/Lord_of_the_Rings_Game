@@ -3,13 +3,12 @@ import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
-
+import socket
 import start
 
 # Инициализация Pygame
 pygame.init()
 pygame.mixer.init()  # Инициализация микшера для звука
-
 
 # Размеры экрана
 SCREEN_WIDTH = 800
@@ -33,9 +32,46 @@ background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREE
 
 # Загрузка фоновой музыки
 pygame.mixer.music.load("music/3.mp3")
-pygame.mixer.music.set_volume(0.5) #установите громкость
+pygame.mixer.music.set_volume(0.5)  # установите громкость
 pygame.mixer.music.play(-1)  # Бесконечное воспроизведение
 
+# Класс текстового поля
+class InputBox:
+    def __init__(self, x, y, width, height, text=''):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = LIGHT_GRAY
+        self.text = text
+        self.txt_surface = font.render(text, True, BLACK)
+        self.active = False
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Если пользователь нажал на текстовое поле
+            if self.rect.collidepoint(event.pos):
+                self.active = not self.active
+            else:
+                self.active = False
+            # Изменение цвета поля ввода
+            self.color = WHITE if self.active else LIGHT_GRAY
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    if len(self.text) < 15:
+                        self.text += event.unicode
+                # Перерисовка текста
+                self.txt_surface = font.render(self.text, True, BLACK)
+
+    def update(self):
+        # Изменение ширины поля, если текст слишком длинный
+        width = max(200, self.txt_surface.get_width() + 10)
+        self.rect.w = width
+
+    def draw(self, screen):
+        # Отображение текста и поля ввода
+        screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
+        pygame.draw.rect(screen, self.color, self.rect, 2)
 
 # Класс кнопки
 class Button:
@@ -97,7 +133,6 @@ def start_game():
     pygame.mixer.music.stop()  # Останавливаем фоновую музыку
     start.main()
 
-
 def play_video(filename):
     try:
         movie = pygame.movie.Movie(filename)
@@ -126,16 +161,13 @@ def play_video(filename):
         print(f"Ошибка воспроизведения видео: {e}")
         # Обработайте ошибку воспроизведения видео, например, выведите сообщение об ошибке и вернитесь в меню
 
-
 def show_credits():
     print("Титры:")
-
 
 def open_settings():
     global settings_open
     settings_open = True
     settings_menu()
-
 
 # Основной цикл настроек
 def settings_menu():
@@ -170,7 +202,6 @@ def settings_menu():
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Главное меню")
 
-
 # Создание кнопок
 button_width = 200
 button_height = 50
@@ -186,9 +217,11 @@ settings_button = Button(button_x, button_y_start + 2 * button_spacing, button_w
 
 buttons = [start_button, credits_button, settings_button]
 
+# Создание текстового поля для ввода юзернейма
+input_box = InputBox(button_x, 50, 200, 40)
+
 # Флаг, указывающий, открыты ли настройки
 settings_open = False
-
 
 # Основной цикл меню
 def main_menu():
@@ -201,6 +234,7 @@ def main_menu():
                 sys.exit()
             for button in buttons:
                 button.handle_event(event)
+            input_box.handle_event(event)
 
         # Обработка наведения мыши
         mouse_pos = pygame.mouse.get_pos()
@@ -214,11 +248,12 @@ def main_menu():
         screen.blit(background_image, (0, 0))  # Отображаем фоновое изображение
         for button in buttons:
             button.draw(screen)
+        input_box.update()
+        input_box.draw(screen)
         pygame.display.flip()
 
     pygame.quit()
     sys.exit()
-
 
 # Запуск меню
 if __name__ == "__main__":
