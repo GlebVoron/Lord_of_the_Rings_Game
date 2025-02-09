@@ -1,10 +1,12 @@
 import pygame
-import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
 import progress_board
 import start
+import sys
+import sqlite3
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
 
 # Инициализация Pygame
 pygame.init()
@@ -26,6 +28,40 @@ RED = (255, 0, 0)
 
 # Шрифт
 font = pygame.font.Font(None, 36)
+
+
+class LogWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Логи игроков")
+        self.setGeometry(100, 100, 800, 600)
+
+        # Создаем таблицу для отображения логов
+        self.table = QTableWidget()
+        self.table.setColumnCount(6)
+        self.table.setHorizontalHeaderLabels(["ID", "Начало", "Конец", "Длительность", "Игрок", "Уровень"])
+
+        # Настройка таблицы
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)  # Растягиваем столбцы
+        self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Запрещаем редактирование
+
+        self.load_logs()
+
+        self.setCentralWidget(self.table)
+
+    def load_logs(self):
+        # Подключаемся к базе данных
+        conn = sqlite3.connect('game_stats.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM game_sessions ORDER BY id DESC')
+        logs = cursor.fetchall()
+        conn.close()
+
+        self.table.setRowCount(len(logs))
+        for row, log in enumerate(logs):
+            for col, data in enumerate(log):
+                item = QTableWidgetItem(str(data))
+                self.table.setItem(row, col, item)
 
 
 # Класс кнопки
@@ -118,8 +154,11 @@ def play_video(filename):
         # Обработайте ошибку воспроизведения видео, например, выведите сообщение об ошибке и вернитесь в меню
 
 
-def show_credits():
-    print("Титры:")
+def logbook():
+    app = QApplication(sys.argv)
+    log_window = LogWindow()
+    log_window.show()
+    app.exec()
 
 
 def open_settings():
@@ -170,12 +209,12 @@ button_y_start = 150
 button_spacing = 100
 
 start_button = Button(button_x, button_y_start, button_width, button_height, "Еще раз играть", GRAY, WHITE, start_game)
-credits_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Титры", GRAY, WHITE,
-                        show_credits)
+logbook_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Логи игроков", GRAY, WHITE,
+                        logbook)
 settings_button = Button(button_x, button_y_start + 2 * button_spacing, button_width, button_height, "Настройки", GRAY,
                          WHITE, open_settings)
 
-buttons = [start_button, credits_button, settings_button]
+buttons = [start_button, logbook_button, settings_button]
 
 # Флаг, указывающий, открыты ли настройки
 settings_open = False
@@ -183,6 +222,7 @@ settings_open = False
 
 # Основной цикл меню
 def main_menu():
+    progress_board.create_table()
     progress_board.record_level_session()
     background_image = pygame.image.load("fon/горы.jpg")
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))

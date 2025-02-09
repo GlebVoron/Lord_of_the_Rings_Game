@@ -1,14 +1,9 @@
-# Импортируем библиотеку pygame
-import pygame
-from pygame import *
 from player import *
 from blocks import *
 from monsters import *
-import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
-import time
 import menu_stop
 import datetime
 import progress_board
@@ -84,6 +79,7 @@ def loadLevel():
 
 
 def main():
+    progress_board.create_table()
     global level
     global entities
     global animatedEntities

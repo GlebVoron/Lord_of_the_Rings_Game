@@ -226,6 +226,7 @@ settings_open = False
 
 # Основной цикл меню
 def main_menu():
+    progress_board.create_table()
     running = True
     while running:
         for event in pygame.event.get():

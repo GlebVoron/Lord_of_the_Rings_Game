@@ -2,10 +2,10 @@ import sqlite3
 import datetime
 import time
 
-start_time = None
-end_time = None
-username = None
-level_passed = "Пройден"
+start_time = 0
+end_time = 0
+username = ""
+level_passed = ""
 
 
 # Функция для создания таблицы в базе данных
@@ -56,6 +56,12 @@ def record_level_session():
 
     if not username:
         username = "Аноним"
+    if not end_time:
+        end_time = 0
+    if not start_time:
+        start_time = 0
+    if not level_passed:
+        level_passed = "Ошибка"
 
     # Записываем данные в базу данных
     conn = sqlite3.connect('game_stats.db')
@@ -71,9 +77,4 @@ def record_level_session():
 # Пример использования
 if __name__ == "__main__":
     create_table()
-    take_start_time(datetime.datetime.now())
-    take_username("Voron")
-    time.sleep(30)
-    take_end_time(datetime.datetime.now())
-    take_level_passed("Пройден")
-    record_level_session()
+
