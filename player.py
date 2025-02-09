@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
 
+import pygame
 from pygame import *
 import baze
 import os
 import blocks
+import menu_stop
 import monsters
+import progress_board
 
 MOVE_SPEED = 7
 MOVE_EXTRA_SPEED = 2.5  # ускорение
@@ -143,7 +147,15 @@ class Player(sprite.Sprite):
                 elif isinstance(p, blocks.BlockTeleport):
                     self.teleporting(p.goX, p.goY)
                 elif isinstance(p, blocks.Princess):  # если коснулись принцессы
-                    self.winner = True  # победили!!!
+                    self.winner = True # победили!!!
+                    SCREEN_WIDTH = 800
+                    SCREEN_HEIGHT = 600
+                    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                    time_stop = datetime.datetime.now()
+                    progress_board.take_end_time(time_stop)
+                    progress_board.take_level_passed("Пройден")
+                    menu_stop.main_menu()
+                    raise SystemExit
                 else:
                     if xvel > 0:  # если движется вправо
                         self.rect.right = p.rect.left  # то не движется вправо

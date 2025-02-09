@@ -3,8 +3,8 @@ import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
-import socket
 import start
+import progress_board
 
 # Инициализация Pygame
 pygame.init()
@@ -62,6 +62,7 @@ class InputBox:
                         self.text += event.unicode
                 # Перерисовка текста
                 self.txt_surface = font.render(self.text, True, BLACK)
+                progress_board.take_username(self.text)
 
     def update(self):
         # Изменение ширины поля, если текст слишком длинный

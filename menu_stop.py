@@ -3,7 +3,7 @@ import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
-
+import progress_board
 import start
 
 # Инициализация Pygame
@@ -183,6 +183,7 @@ settings_open = False
 
 # Основной цикл меню
 def main_menu():
+    progress_board.record_level_session()
     background_image = pygame.image.load("fon/горы.jpg")
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 

@@ -10,6 +10,8 @@ import pygame.camera
 from pygame.locals import *
 import time
 import menu_stop
+import datetime
+import progress_board
 
 # Объявляем переменные
 WIN_WIDTH = 1000  # Ширина создаваемого окна
@@ -82,11 +84,22 @@ def loadLevel():
 
 
 def main():
+    global level
+    global entities
+    global animatedEntities
+    global monsters
+    global platforms
+    level = []
+    entities = pygame.sprite.Group()  # Все объекты
+    animatedEntities = pygame.sprite.Group()  # все анимированные объекты, за исключением героя
+    monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
+    platforms = []  # то, во что мы будем врезаться или опираться
+
+    time_start = datetime.datetime.now()
+    progress_board.take_start_time(time_start)
     pygame.mixer.music.load("music/1.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
-
-    time_start = time.time()
 
     loadLevel()
     pygame.init()  # Инициация PyGame, обязательная строчка
@@ -150,10 +163,12 @@ def main():
         timer.tick(60)
         for e in pygame.event.get():  # Обрабатываем события
             if e.type == QUIT:
-                time_stop = time.time()
                 SCREEN_WIDTH = 800
                 SCREEN_HEIGHT = 600
                 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                time_stop = datetime.datetime.now()
+                progress_board.take_end_time(time_stop)
+                progress_board.take_level_passed("Не пройден")
                 menu_stop.main_menu()
                 raise SystemExit
             if e.type == KEYDOWN and e.key == K_UP:
