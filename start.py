@@ -11,7 +11,7 @@ from pygame.locals import *
 
 # Объявляем переменные
 WIN_WIDTH = 1000  # Ширина создаваемого окна
-WIN_HEIGHT = 700  # Высота
+WIN_HEIGHT = 840  # Высота
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)  # Группируем ширину и высоту в одну переменную
 BACKGROUND_COLOR = '#0aafd0'
 pygame.mixer.init()
@@ -22,6 +22,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pygame.mixer.music.load("music/1.mp3")
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
+
+F = False
+
+F1 = open('%s/levels/level.txt' % FILE_DIR)
 
 
 class Camera(object):
@@ -49,10 +53,8 @@ def camera_configure(camera, target_rect):
     return Rect(l, t, w, h)
 
 
-def loadLevel():
+def loadLevel(levelFile):
     global playerX, playerY  # объявляем глобальные переменные, это координаты героя
-
-    levelFile = open('%s/levels/level.txt' % FILE_DIR)
     line = " "
     commands = []
     while line[0] != "/":  # пока не нашли символ завершения файла
@@ -77,14 +79,32 @@ def loadLevel():
                     animatedEntities.add(tp)
                 if commands[0] == "monster":  # если первая команда monster, то создаем монстра
                     mn = Monster(int(commands[1]), int(commands[2]), int(commands[3]), int(commands[4]),
-                                 int(commands[5]), int(commands[6]))
+                                 int(commands[5]), int(commands[6]), int(commands[7]))
                     entities.add(mn)
                     platforms.append(mn)
                     monsters.add(mn)
 
 
-def main():
-    loadLevel()
+def main(Level):
+    progress_board.create_table()
+    global level
+    global entities
+    global animatedEntities
+    global monsters
+    global platforms
+    level = []
+    entities = pygame.sprite.Group()  # Все объекты
+    animatedEntities = pygame.sprite.Group()  # все анимированные объекты, за исключением героя
+    monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
+    platforms = []  # то, во что мы будем врезаться или опираться
+
+    time_start = datetime.datetime.now()
+    progress_board.take_start_time(time_start)
+    pygame.mixer.music.load("music/1.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+
+    loadLevel(Level)
     pygame.init()  # Инициация PyGame, обязательная строчка
     screen = pygame.display.set_mode(DISPLAY)  # Создаем окошко
     pygame.display.set_caption("Властелин колец")  # Пишем в шапку
@@ -95,8 +115,9 @@ def main():
     left = right = False  # по умолчанию - стоим
     up = False
     running = False
-
-    hero = Player(playerX, playerY)  # создаем героя по (x,y) координатам
+    px = playerX
+    py = playerY
+    hero = Player(px, py)  # создаем героя по (x,y) координатам
     entities.add(hero)
 
     timer = pygame.time.Clock()
@@ -132,6 +153,11 @@ def main():
                 entities.add(pr)
                 platforms.append(pr)
                 animatedEntities.add(pr)
+            if col == "K":
+                pr1 = Princess1(x, y)
+                entities.add(pr1)
+                platforms.append(pr1)
+                animatedEntities.add(pr1)
 
             x += PLATFORM_WIDTH  # блоки платформы ставятся на ширине блоков
         y += PLATFORM_HEIGHT  # то же самое и с высотой
@@ -146,6 +172,13 @@ def main():
         timer.tick(60)
         for e in pygame.event.get():  # Обрабатываем события
             if e.type == QUIT:
+                SCREEN_WIDTH = 800
+                SCREEN_HEIGHT = 600
+                screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                time_stop = datetime.datetime.now()
+                progress_board.take_end_time(time_stop)
+                progress_board.take_level_passed("Не пройден")
+                menu_stop.main_menu()
                 raise SystemExit
             if e.type == KEYDOWN and e.key == K_UP:
                 up = True
@@ -174,6 +207,8 @@ def main():
         for e in entities:
             screen.blit(e.image, camera.apply(e))
         pygame.display.update()  # обновление и вывод всех изменений на экран
+    else:
+        pygame.display.update()
 
 
 level = []
@@ -182,6 +217,4 @@ animatedEntities = pygame.sprite.Group()  # все анимированные о
 monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
 platforms = []  # то, во что мы будем врезаться или опираться
 if __name__ == "__main__":
-    main()
-
-
+    main(F1)

@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import datetime
+import pygame
 from pygame import *
-import baze
 import os
 import blocks
+import menu_stop
 import monsters
+import baze
+import progress_board
 
 MOVE_SPEED = 7
 MOVE_EXTRA_SPEED = 2.5  # ускорение
 WIDTH = 22
 HEIGHT = 32
 COLOR = "#888888"
-JUMP_POWER = 10
+JUMP_POWER = 7
 JUMP_EXTRA_POWER = 1  # дополнительная сила прыжка
-GRAVITY = 0.5  # Сила, которая будет тянуть нас вниз
+GRAVITY = 0.35  # Сила, которая будет тянуть нас вниз
 ANIMATION_DELAY = 0.1  # скорость смены кадров
 ANIMATION_SUPER_SPEED_DELAY = 0.05  # скорость смены кадров при ускорении
 ICON_DIR = os.path.dirname(__file__)  # Полный путь к каталогу с файлами
@@ -81,6 +84,7 @@ class Player(sprite.Sprite):
         self.boltAnimJump = baze.PygAnimation(ANIMATION_JUMP)
         self.boltAnimJump.play()
         self.winner = False
+        self.f = False
 
     def update(self, left, right, up, running, platforms):
 
@@ -143,7 +147,20 @@ class Player(sprite.Sprite):
                 elif isinstance(p, blocks.BlockTeleport):
                     self.teleporting(p.goX, p.goY)
                 elif isinstance(p, blocks.Princess):  # если коснулись принцессы
-                    self.winner = True  # победили!!!
+                    self.f = True
+                    self.startX = 11000
+                    self.startY = 1120
+                elif isinstance(p, blocks.Princess1):  # если коснулись принцессы
+                    self.winner = True
+                    SCREEN_WIDTH = 800
+                    SCREEN_HEIGHT = 600
+                    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                    time_stop = datetime.datetime.now()
+                    progress_board.take_end_time(time_stop)
+                    progress_board.take_level_passed("Пройден")
+                    menu_stop.main_menu()
+                    raise SystemExit
+
                 else:
                     if xvel > 0:  # если движется вправо
                         self.rect.right = p.rect.left  # то не движется вправо

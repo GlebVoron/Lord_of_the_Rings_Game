@@ -38,7 +38,7 @@ class PygAnimation(object):
                 frame = frames[i]
                 assert type(frame) in (list, tuple) and len(frame) == 2, 'Frame %s has incorrect format.' % (i)
                 assert type(frame[0]) in (
-                str, pygame.Surface), 'Frame %s image must be a string filename or a pygame.Surface' % (i)
+                    str, pygame.Surface), 'Frame %s image must be a string filename or a pygame.Surface' % (i)
                 assert frame[1] > 0, 'Frame %s duration must be greater than zero.' % (i)
                 if type(frame[0]) == str:
                     frame = (pygame.image.load(frame[0]), frame[1])

@@ -5,22 +5,34 @@ from pygame import *
 import baze
 import os
 
-MONSTER_WIDTH = 32
-MONSTER_HEIGHT = 32
 MONSTER_COLOR = "#2110FF"
 ICON_DIR = os.path.dirname(__file__)  # Полный путь к каталогу с файлами
 
 ANIMATION_MONSTERHORYSONTAL = [('%s/monsters/fire1.png' % ICON_DIR),
                                ('%s/monsters/fire2.png' % ICON_DIR)]
-ANIMATION_MONSTERHORYSONTAL1 = [('%s/monsters/fire3.png' % ICON_DIR),
-                                ('%s/monsters/fire4.png' % ICON_DIR)]
-
-A = ANIMATION_MONSTERHORYSONTAL
+ANIMATION_MONSTERHORYSONTAL1 = [('%s/monsters/Orc1.png' % ICON_DIR),
+                                ('%s/monsters/Orc2.png' % ICON_DIR)]
+ANIMATION_MONSTERHORYSONTAL2 = [('%s/monsters/Sauron1.png' % ICON_DIR),
+                                ('%s/monsters/Sauron2.png' % ICON_DIR)]
 
 
 class Monster(sprite.Sprite):
-    def __init__(self, x, y, left, up, maxLengthLeft, maxLengthUp):
-        self.flag = True
+    def __init__(self, x, y, left, up, maxLengthLeft, maxLengthUp, p):
+        if p == 1:
+            self.flag = True
+            MONSTER_HEIGHT = 32
+            MONSTER_WIDTH = 32
+            A = ANIMATION_MONSTERHORYSONTAL
+        elif p == 2:
+            self.flag = False
+            MONSTER_WIDTH = 50
+            MONSTER_HEIGHT = 70
+            A = ANIMATION_MONSTERHORYSONTAL2
+        else:
+            self.flag = True
+            MONSTER_WIDTH = 35
+            MONSTER_HEIGHT = 40
+            A = ANIMATION_MONSTERHORYSONTAL1
         sprite.Sprite.__init__(self)
         self.image = Surface((MONSTER_WIDTH, MONSTER_HEIGHT))
         self.image.fill(Color(MONSTER_COLOR))
@@ -34,6 +46,11 @@ class Monster(sprite.Sprite):
         self.yvel = up  # скорость движения по вертикали, 0 - не двигается
         boltAnim = []
         if self.flag:
+            for anim in A:
+                boltAnim.append((anim, 0.3))
+            self.boltAnim = baze.PygAnimation(boltAnim)
+            self.boltAnim.play()
+        else:
             for anim in A:
                 boltAnim.append((anim, 0.3))
             self.boltAnim = baze.PygAnimation(boltAnim)

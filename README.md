@@ -1,2 +1,0 @@
-# Lord_of_the_Rings_Game
-Lord_of_the_Rings_Game
