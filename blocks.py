@@ -3,7 +3,7 @@
 
 from pygame import *
 import os
-import baze
+import pyganim
 
 PLATFORM_WIDTH = 32
 PLATFORM_HEIGHT = 32
@@ -13,12 +13,12 @@ PLATFORM_COLOR = "#000000"
 ICON_DIR = os.path.dirname(__file__)  # Полный путь к каталогу с файлами
 
 ANIMATION_BLOCKTELEPORT = [
-    ('%s/blocks/platform.png' % ICON_DIR),
-    ('%s/blocks/platform.png' % ICON_DIR)]
+    ('%s/blocks/portal2.png' % ICON_DIR),
+    ('%s/blocks/portal1.png' % ICON_DIR)]
 
 ANIMATION_PRINCESS = [
-    ('%s/blocks/platform.png' % ICON_DIR),
-    ('%s/blocks/platform.png' % ICON_DIR)]
+    ('%s/blocks/Sarumaun.png' % ICON_DIR),
+    ('%s/blocks/Sarumaun1.png' % ICON_DIR)]
 
 
 class Platform(sprite.Sprite):
@@ -74,7 +74,7 @@ class Forest(sprite.Sprite):
 class BlockDie(Platform):
     def __init__(self, x, y):
         Platform.__init__(self, x, y)
-        self.image = image.load("%s/blocks/шипы.png" % ICON_DIR)
+        self.image = image.load("%s/blocks/лава.png" % ICON_DIR)
 
 
 class BlockTeleport(Platform):
@@ -85,7 +85,7 @@ class BlockTeleport(Platform):
         boltAnim = []
         for anim in ANIMATION_BLOCKTELEPORT:
             boltAnim.append((anim, 0.3))
-        self.boltAnim = baze.PygAnimation(boltAnim)
+        self.boltAnim = pyganim.PygAnimation(boltAnim)
         self.boltAnim.play()
 
     def update(self):
@@ -99,8 +99,17 @@ class Princess(Platform):
         boltAnim = []
         for anim in ANIMATION_PRINCESS:
             boltAnim.append((anim, 0.8))
+        self.boltAnim = pyganim.PygAnimation(boltAnim)
+        self.boltAnim.play()
 
-        self.boltAnim = baze.PygAnimation(boltAnim)
+
+class Princess1(Platform):
+    def __init__(self, x, y):
+        Platform.__init__(self, x, y)
+        boltAnim = []
+        for anim in ANIMATION_PRINCESS:
+            boltAnim.append((anim, 0.8))
+        self.boltAnim = pyganim.PygAnimation(boltAnim)
         self.boltAnim.play()
 
     def update(self):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pygame import *
-import baze
+import pyganim
 import os
 import blocks
 import monsters
@@ -14,7 +14,7 @@ HEIGHT = 32
 COLOR = "#888888"
 JUMP_POWER = 10
 JUMP_EXTRA_POWER = 1  # дополнительная сила прыжка
-GRAVITY = 0.5  # Сила, которая будет тянуть нас вниз
+GRAVITY = 0.35  # Сила, которая будет тянуть нас вниз
 ANIMATION_DELAY = 0.1  # скорость смены кадров
 ANIMATION_SUPER_SPEED_DELAY = 0.05  # скорость смены кадров при ускорении
 ICON_DIR = os.path.dirname(__file__)  # Полный путь к каталогу с файлами
@@ -53,9 +53,9 @@ class Player(sprite.Sprite):
         for anim in ANIMATION_RIGHT:
             boltAnim.append((anim, ANIMATION_DELAY))
             boltAnimSuperSpeed.append((anim, ANIMATION_SUPER_SPEED_DELAY))
-        self.boltAnimRight = baze.PygAnimation(boltAnim)
+        self.boltAnimRight = pyganim.PygAnimation(boltAnim)
         self.boltAnimRight.play()
-        self.boltAnimRightSuperSpeed = baze.PygAnimation(boltAnimSuperSpeed)
+        self.boltAnimRightSuperSpeed = pyganim.PygAnimation(boltAnimSuperSpeed)
         self.boltAnimRightSuperSpeed.play()
         #        Анимация движения влево
         boltAnim = []
@@ -63,24 +63,25 @@ class Player(sprite.Sprite):
         for anim in ANIMATION_LEFT:
             boltAnim.append((anim, ANIMATION_DELAY))
             boltAnimSuperSpeed.append((anim, ANIMATION_SUPER_SPEED_DELAY))
-        self.boltAnimLeft = baze.PygAnimation(boltAnim)
+        self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
-        self.boltAnimLeftSuperSpeed = baze.PygAnimation(boltAnimSuperSpeed)
+        self.boltAnimLeftSuperSpeed = pyganim.PygAnimation(boltAnimSuperSpeed)
         self.boltAnimLeftSuperSpeed.play()
 
-        self.boltAnimStay = baze.PygAnimation(ANIMATION_STAY)
+        self.boltAnimStay = pyganim.PygAnimation(ANIMATION_STAY)
         self.boltAnimStay.play()
         self.boltAnimStay.blit(self.image, (0, 0))  # По-умолчанию, стоим
 
-        self.boltAnimJumpLeft = baze.PygAnimation(ANIMATION_JUMP_LEFT)
+        self.boltAnimJumpLeft = pyganim.PygAnimation(ANIMATION_JUMP_LEFT)
         self.boltAnimJumpLeft.play()
 
-        self.boltAnimJumpRight = baze.PygAnimation(ANIMATION_JUMP_RIGHT)
+        self.boltAnimJumpRight = pyganim.PygAnimation(ANIMATION_JUMP_RIGHT)
         self.boltAnimJumpRight.play()
 
-        self.boltAnimJump = baze.PygAnimation(ANIMATION_JUMP)
+        self.boltAnimJump = pyganim.PygAnimation(ANIMATION_JUMP)
         self.boltAnimJump.play()
         self.winner = False
+        self.f = False
 
     def update(self, left, right, up, running, platforms):
 
@@ -143,7 +144,11 @@ class Player(sprite.Sprite):
                 elif isinstance(p, blocks.BlockTeleport):
                     self.teleporting(p.goX, p.goY)
                 elif isinstance(p, blocks.Princess):  # если коснулись принцессы
-                    self.winner = True  # победили!!!
+                    self.f = True  # победили!!!
+                    self.startX = 11000
+                    self.startY = 1120
+                elif isinstance(p, blocks.Princess1):  # если коснулись принцессы
+                    self.winner = True
                 else:
                     if xvel > 0:  # если движется вправо
                         self.rect.right = p.rect.left  # то не движется вправо
