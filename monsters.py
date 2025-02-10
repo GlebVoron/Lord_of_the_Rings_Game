@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pygame import *
-import pyganim
+import baze
 import os
 
 MONSTER_COLOR = "#2110FF"
@@ -48,12 +48,12 @@ class Monster(sprite.Sprite):
         if self.flag:
             for anim in A:
                 boltAnim.append((anim, 0.3))
-            self.boltAnim = pyganim.PygAnimation(boltAnim)
+            self.boltAnim = baze.PygAnimation(boltAnim)
             self.boltAnim.play()
         else:
             for anim in A:
                 boltAnim.append((anim, 0.3))
-            self.boltAnim = pyganim.PygAnimation(boltAnim)
+            self.boltAnim = baze.PygAnimation(boltAnim)
             self.boltAnim.play()
 
     def update(self, platforms):  # по принципу героя

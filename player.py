@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from pygame import *
-import pyganim
 import os
 import blocks
 import monsters
+import baze
 
 MOVE_SPEED = 7
 MOVE_EXTRA_SPEED = 2.5  # ускорение
@@ -53,9 +53,9 @@ class Player(sprite.Sprite):
         for anim in ANIMATION_RIGHT:
             boltAnim.append((anim, ANIMATION_DELAY))
             boltAnimSuperSpeed.append((anim, ANIMATION_SUPER_SPEED_DELAY))
-        self.boltAnimRight = pyganim.PygAnimation(boltAnim)
+        self.boltAnimRight = baze.PygAnimation(boltAnim)
         self.boltAnimRight.play()
-        self.boltAnimRightSuperSpeed = pyganim.PygAnimation(boltAnimSuperSpeed)
+        self.boltAnimRightSuperSpeed = baze.PygAnimation(boltAnimSuperSpeed)
         self.boltAnimRightSuperSpeed.play()
         #        Анимация движения влево
         boltAnim = []
@@ -63,22 +63,22 @@ class Player(sprite.Sprite):
         for anim in ANIMATION_LEFT:
             boltAnim.append((anim, ANIMATION_DELAY))
             boltAnimSuperSpeed.append((anim, ANIMATION_SUPER_SPEED_DELAY))
-        self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
+        self.boltAnimLeft = baze.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
-        self.boltAnimLeftSuperSpeed = pyganim.PygAnimation(boltAnimSuperSpeed)
+        self.boltAnimLeftSuperSpeed = baze.PygAnimation(boltAnimSuperSpeed)
         self.boltAnimLeftSuperSpeed.play()
 
-        self.boltAnimStay = pyganim.PygAnimation(ANIMATION_STAY)
+        self.boltAnimStay = baze.PygAnimation(ANIMATION_STAY)
         self.boltAnimStay.play()
         self.boltAnimStay.blit(self.image, (0, 0))  # По-умолчанию, стоим
 
-        self.boltAnimJumpLeft = pyganim.PygAnimation(ANIMATION_JUMP_LEFT)
+        self.boltAnimJumpLeft = baze.PygAnimation(ANIMATION_JUMP_LEFT)
         self.boltAnimJumpLeft.play()
 
-        self.boltAnimJumpRight = pyganim.PygAnimation(ANIMATION_JUMP_RIGHT)
+        self.boltAnimJumpRight = baze.PygAnimation(ANIMATION_JUMP_RIGHT)
         self.boltAnimJumpRight.play()
 
-        self.boltAnimJump = pyganim.PygAnimation(ANIMATION_JUMP)
+        self.boltAnimJump = baze.PygAnimation(ANIMATION_JUMP)
         self.boltAnimJump.play()
         self.winner = False
         self.f = False
