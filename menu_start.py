@@ -139,36 +139,7 @@ class Slider:
 # Функции для действий кнопок
 def start_game():
     pygame.mixer.music.stop()  # Останавливаем фоновую музыку
-    start.main()
-
-
-def play_video(filename):
-    try:
-        movie = pygame.movie.Movie(filename)
-        movie_screen = pygame.display.set_mode(movie.get_size())
-        movie.set_display(movie_screen)
-        movie.play()
-
-        playing = True
-        while playing:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    movie.stop()
-                    playing = False
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == KEYDOWN:
-                    if event.key == K_ESCAPE:
-                        movie.stop()
-                        playing = False
-            if not movie.get_busy():
-                playing = False
-
-            pygame.display.flip()
-            pygame.time.delay(10)
-    except pygame.error as e:
-        print(f"Ошибка воспроизведения видео: {e}")
-        # Обработайте ошибку воспроизведения видео, например, выведите сообщение об ошибке и вернитесь в меню
+    start.main(start.F1)
 
 
 def logbook():

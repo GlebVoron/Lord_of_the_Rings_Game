@@ -87,41 +87,6 @@ class Slider:
         return self.value
 
 
-# Функции для действий кнопок
-def start_game():
-    pygame.mixer.music.stop()  # Останавливаем фоновую музыку
-    start.main()
-
-
-def play_video(filename):
-    try:
-        movie = pygame.movie.Movie(filename)
-        movie_screen = pygame.display.set_mode(movie.get_size())
-        movie.set_display(movie_screen)
-        movie.play()
-
-        playing = True
-        while playing:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    movie.stop()
-                    playing = False
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == KEYDOWN:
-                    if event.key == K_ESCAPE:
-                        movie.stop()
-                        playing = False
-            if not movie.get_busy():
-                playing = False
-
-            pygame.display.flip()
-            pygame.time.delay(10)
-    except pygame.error as e:
-        print(f"Ошибка воспроизведения видео: {e}")
-        # Обработайте ошибку воспроизведения видео, например, выведите сообщение об ошибке и вернитесь в меню
-
-
 def logbook():
     app = QApplication(sys.argv)
     log_window = bd_win.LogWindow()
@@ -176,14 +141,13 @@ button_x = (SCREEN_WIDTH - button_width) // 2
 button_y_start = 150
 button_spacing = 100
 
-start_button = Button(button_x, button_y_start, button_width, button_height, "Еще раз играть", GRAY, WHITE, start_game)
 logbook_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Логи игроков", GRAY,
                         WHITE,
                         logbook)
 settings_button = Button(button_x, button_y_start + 2 * button_spacing, button_width, button_height, "Настройки", GRAY,
                          WHITE, open_settings)
 
-buttons = [start_button, logbook_button, settings_button]
+buttons = [logbook_button, settings_button]
 
 # Флаг, указывающий, открыты ли настройки
 settings_open = False

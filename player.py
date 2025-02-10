@@ -15,7 +15,7 @@ MOVE_EXTRA_SPEED = 2.5  # ускорение
 WIDTH = 22
 HEIGHT = 32
 COLOR = "#888888"
-JUMP_POWER = 10
+JUMP_POWER = 7
 JUMP_EXTRA_POWER = 1  # дополнительная сила прыжка
 GRAVITY = 0.35  # Сила, которая будет тянуть нас вниз
 ANIMATION_DELAY = 0.1  # скорость смены кадров
@@ -147,7 +147,7 @@ class Player(sprite.Sprite):
                 elif isinstance(p, blocks.BlockTeleport):
                     self.teleporting(p.goX, p.goY)
                 elif isinstance(p, blocks.Princess):  # если коснулись принцессы
-                    self.f = True 
+                    self.f = True
                     self.startX = 11000
                     self.startY = 1120
                 elif isinstance(p, blocks.Princess1):  # если коснулись принцессы
@@ -160,7 +160,7 @@ class Player(sprite.Sprite):
                     progress_board.take_level_passed("Пройден")
                     menu_stop.main_menu()
                     raise SystemExit
-                    
+
                 else:
                     if xvel > 0:  # если движется вправо
                         self.rect.right = p.rect.left  # то не движется вправо
