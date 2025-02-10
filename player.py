@@ -147,7 +147,7 @@ class Player(sprite.Sprite):
                 elif isinstance(p, blocks.BlockTeleport):
                     self.teleporting(p.goX, p.goY)
                 elif isinstance(p, blocks.Princess):  # если коснулись принцессы
-                    self.winner = True # победили!!!
+                    self.winner = True  # победили!!!
                     SCREEN_WIDTH = 800
                     SCREEN_HEIGHT = 600
                     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))

@@ -5,13 +5,12 @@ from pygame.locals import *
 import progress_board
 import start
 import sys
-import sqlite3
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView
+import bd_win
+from PyQt6.QtWidgets import QApplication
 
 # Инициализация Pygame
 pygame.init()
 pygame.mixer.init()  # Инициализация микшера для звука
-
 
 # Размеры экрана
 SCREEN_WIDTH = 800
@@ -28,40 +27,6 @@ RED = (255, 0, 0)
 
 # Шрифт
 font = pygame.font.Font(None, 36)
-
-
-class LogWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Логи игроков")
-        self.setGeometry(100, 100, 800, 600)
-
-        # Создаем таблицу для отображения логов
-        self.table = QTableWidget()
-        self.table.setColumnCount(6)
-        self.table.setHorizontalHeaderLabels(["ID", "Начало", "Конец", "Длительность", "Игрок", "Уровень"])
-
-        # Настройка таблицы
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)  # Растягиваем столбцы
-        self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Запрещаем редактирование
-
-        self.load_logs()
-
-        self.setCentralWidget(self.table)
-
-    def load_logs(self):
-        # Подключаемся к базе данных
-        conn = sqlite3.connect('game_stats.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM game_sessions ORDER BY id DESC')
-        logs = cursor.fetchall()
-        conn.close()
-
-        self.table.setRowCount(len(logs))
-        for row, log in enumerate(logs):
-            for col, data in enumerate(log):
-                item = QTableWidgetItem(str(data))
-                self.table.setItem(row, col, item)
 
 
 # Класс кнопки
@@ -89,12 +54,14 @@ class Button:
     def is_hovered(self, pos):
         return self.rect.collidepoint(pos)
 
+
 # Класс ползунка
 class Slider:
     def __init__(self, x, y, width, height, initial_value=0.5):
         self.rect = pygame.Rect(x, y, width, height)
         self.thumb_width = 10  # Ширина "ползунка"
-        self.thumb_rect = pygame.Rect(x + int(width * initial_value) - self.thumb_width // 2, y, self.thumb_width, height)
+        self.thumb_rect = pygame.Rect(x + int(width * initial_value) - self.thumb_width // 2, y, self.thumb_width,
+                                      height)
         self.value = initial_value
         self.dragging = False
 
@@ -119,6 +86,7 @@ class Slider:
     def get_value(self):
         return self.value
 
+
 # Функции для действий кнопок
 def start_game():
     pygame.mixer.music.stop()  # Останавливаем фоновую музыку
@@ -140,8 +108,8 @@ def play_video(filename):
                     playing = False
                     pygame.quit()
                     sys.exit()
-                elif event.type == KEYDOWN:  # Add KEYDOWN event handling
-                    if event.key == K_ESCAPE:  # Example: Stop video with ESC key
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
                         movie.stop()
                         playing = False
             if not movie.get_busy():
@@ -156,7 +124,7 @@ def play_video(filename):
 
 def logbook():
     app = QApplication(sys.argv)
-    log_window = LogWindow()
+    log_window = bd_win.LogWindow()
     log_window.show()
     app.exec()
 
@@ -209,7 +177,8 @@ button_y_start = 150
 button_spacing = 100
 
 start_button = Button(button_x, button_y_start, button_width, button_height, "Еще раз играть", GRAY, WHITE, start_game)
-logbook_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Логи игроков", GRAY, WHITE,
+logbook_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Логи игроков", GRAY,
+                        WHITE,
                         logbook)
 settings_button = Button(button_x, button_y_start + 2 * button_spacing, button_width, button_height, "Настройки", GRAY,
                          WHITE, open_settings)

@@ -3,6 +3,8 @@ import sys
 import pygame.mixer
 import pygame.camera
 from pygame.locals import *
+from PyQt6.QtWidgets import QApplication
+import bd_win
 import start
 import progress_board
 
@@ -34,6 +36,7 @@ background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREE
 pygame.mixer.music.load("music/3.mp3")
 pygame.mixer.music.set_volume(0.5)  # установите громкость
 pygame.mixer.music.play(-1)  # Бесконечное воспроизведение
+
 
 # Класс текстового поля
 class InputBox:
@@ -74,6 +77,7 @@ class InputBox:
         screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
+
 # Класс кнопки
 class Button:
     def __init__(self, x, y, width, height, text, color, hover_color, action=None):
@@ -99,12 +103,14 @@ class Button:
     def is_hovered(self, pos):
         return self.rect.collidepoint(pos)
 
+
 # Класс ползунка
 class Slider:
     def __init__(self, x, y, width, height, initial_value=0.5):
         self.rect = pygame.Rect(x, y, width, height)
         self.thumb_width = 10  # Ширина "ползунка"
-        self.thumb_rect = pygame.Rect(x + int(width * initial_value) - self.thumb_width // 2, y, self.thumb_width, height)
+        self.thumb_rect = pygame.Rect(x + int(width * initial_value) - self.thumb_width // 2, y, self.thumb_width,
+                                      height)
         self.value = initial_value
         self.dragging = False
 
@@ -129,10 +135,12 @@ class Slider:
     def get_value(self):
         return self.value
 
+
 # Функции для действий кнопок
 def start_game():
     pygame.mixer.music.stop()  # Останавливаем фоновую музыку
     start.main()
+
 
 def play_video(filename):
     try:
@@ -149,8 +157,8 @@ def play_video(filename):
                     playing = False
                     pygame.quit()
                     sys.exit()
-                elif event.type == KEYDOWN:  # Add KEYDOWN event handling
-                    if event.key == K_ESCAPE:  # Example: Stop video with ESC key
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
                         movie.stop()
                         playing = False
             if not movie.get_busy():
@@ -162,13 +170,19 @@ def play_video(filename):
         print(f"Ошибка воспроизведения видео: {e}")
         # Обработайте ошибку воспроизведения видео, например, выведите сообщение об ошибке и вернитесь в меню
 
-def show_credits():
-    print("Титры:")
+
+def logbook():
+    app = QApplication(sys.argv)
+    log_window = bd_win.LogWindow()
+    log_window.show()
+    app.exec()
+
 
 def open_settings():
     global settings_open
     settings_open = True
     settings_menu()
+
 
 # Основной цикл настроек
 def settings_menu():
@@ -203,6 +217,7 @@ def settings_menu():
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Главное меню")
 
+
 # Создание кнопок
 button_width = 200
 button_height = 50
@@ -211,18 +226,20 @@ button_y_start = 150
 button_spacing = 100
 
 start_button = Button(button_x, button_y_start, button_width, button_height, "Начать", GRAY, WHITE, start_game)
-credits_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Титры", GRAY, WHITE,
-                        show_credits)
+logbook_button = Button(button_x, button_y_start + button_spacing, button_width, button_height, "Логи игроков", GRAY,
+                        WHITE,
+                        logbook)
 settings_button = Button(button_x, button_y_start + 2 * button_spacing, button_width, button_height, "Настройки", GRAY,
                          WHITE, open_settings)
 
-buttons = [start_button, credits_button, settings_button]
+buttons = [start_button, logbook_button, settings_button]
 
 # Создание текстового поля для ввода юзернейма
 input_box = InputBox(button_x, 50, 200, 40)
 
 # Флаг, указывающий, открыты ли настройки
 settings_open = False
+
 
 # Основной цикл меню
 def main_menu():
@@ -256,6 +273,7 @@ def main_menu():
 
     pygame.quit()
     sys.exit()
+
 
 # Запуск меню
 if __name__ == "__main__":
