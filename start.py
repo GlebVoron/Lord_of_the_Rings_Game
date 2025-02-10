@@ -25,8 +25,7 @@ pygame.mixer.music.play(-1)
 
 F = False
 
-F1 = open('%s/levels/1.txt' % FILE_DIR)
-F2 = open('%s/levels/2.txt' % FILE_DIR)
+F1 = open('%s/levels/level.txt' % FILE_DIR)
 
 
 class Camera(object):
@@ -87,6 +86,24 @@ def loadLevel(levelFile):
 
 
 def main(Level):
+    progress_board.create_table()
+    global level
+    global entities
+    global animatedEntities
+    global monsters
+    global platforms
+    level = []
+    entities = pygame.sprite.Group()  # Все объекты
+    animatedEntities = pygame.sprite.Group()  # все анимированные объекты, за исключением героя
+    monsters = pygame.sprite.Group()  # Все передвигающиеся объекты
+    platforms = []  # то, во что мы будем врезаться или опираться
+
+    time_start = datetime.datetime.now()
+    progress_board.take_start_time(time_start)
+    pygame.mixer.music.load("music/1.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+
     loadLevel(Level)
     pygame.init()  # Инициация PyGame, обязательная строчка
     screen = pygame.display.set_mode(DISPLAY)  # Создаем окошко
@@ -98,7 +115,9 @@ def main(Level):
     left = right = False  # по умолчанию - стоим
     up = False
     running = False
-    hero = Player(playerX, playerY)  # создаем героя по (x,y) координатам
+    px = playerX
+    py = playerY
+    hero = Player(px, py)  # создаем героя по (x,y) координатам
     entities.add(hero)
 
     timer = pygame.time.Clock()
@@ -153,6 +172,13 @@ def main(Level):
         timer.tick(60)
         for e in pygame.event.get():  # Обрабатываем события
             if e.type == QUIT:
+                SCREEN_WIDTH = 800
+                SCREEN_HEIGHT = 600
+                screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                time_stop = datetime.datetime.now()
+                progress_board.take_end_time(time_stop)
+                progress_board.take_level_passed("Не пройден")
+                menu_stop.main_menu()
                 raise SystemExit
             if e.type == KEYDOWN and e.key == K_UP:
                 up = True
@@ -192,4 +218,3 @@ monsters = pygame.sprite.Group()  # Все передвигающиеся объ
 platforms = []  # то, во что мы будем врезаться или опираться
 if __name__ == "__main__":
     main(F1)
-
