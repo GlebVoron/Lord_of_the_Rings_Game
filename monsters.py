@@ -4,19 +4,23 @@
 from pygame import *
 import baze
 import os
-from baze import *
 
 MONSTER_WIDTH = 32
 MONSTER_HEIGHT = 32
 MONSTER_COLOR = "#2110FF"
 ICON_DIR = os.path.dirname(__file__)  # Полный путь к каталогу с файлами
 
-ANIMATION_MONSTERHORYSONTAL = [('%s/blocks/platform.png' % ICON_DIR),
-                               ('%s/blocks/platform.png' % ICON_DIR)]
+ANIMATION_MONSTERHORYSONTAL = [('%s/monsters/fire1.png' % ICON_DIR),
+                               ('%s/monsters/fire2.png' % ICON_DIR)]
+ANIMATION_MONSTERHORYSONTAL1 = [('%s/monsters/fire3.png' % ICON_DIR),
+                                ('%s/monsters/fire4.png' % ICON_DIR)]
+
+A = ANIMATION_MONSTERHORYSONTAL
 
 
 class Monster(sprite.Sprite):
     def __init__(self, x, y, left, up, maxLengthLeft, maxLengthUp):
+        self.flag = True
         sprite.Sprite.__init__(self)
         self.image = Surface((MONSTER_WIDTH, MONSTER_HEIGHT))
         self.image.fill(Color(MONSTER_COLOR))
@@ -29,13 +33,16 @@ class Monster(sprite.Sprite):
         self.xvel = left  # cкорость передвижения по горизонтали, 0 - стоит на месте
         self.yvel = up  # скорость движения по вертикали, 0 - не двигается
         boltAnim = []
-        for anim in ANIMATION_MONSTERHORYSONTAL:
-            boltAnim.append((anim, 0.3))
-        self.boltAnim = baze.PygAnimation(boltAnim)
-        self.boltAnim.play()
+        if self.flag:
+            for anim in A:
+                boltAnim.append((anim, 0.3))
+            self.boltAnim = baze.PygAnimation(boltAnim)
+            self.boltAnim.play()
 
     def update(self, platforms):  # по принципу героя
-
+        global ANIMATION_MONSTERHORYSONTAL
+        global ANIMATION_MONSTERHORYSONTAL1
+        global A
         self.image.fill(Color(MONSTER_COLOR))
         self.boltAnim.blit(self.image, (0, 0))
 
@@ -46,8 +53,10 @@ class Monster(sprite.Sprite):
 
         if (abs(self.startX - self.rect.x) > self.maxLengthLeft):
             self.xvel = -self.xvel  # если прошли максимальное растояние, то идеи в обратную сторону
+            A = ANIMATION_MONSTERHORYSONTAL1
         if (abs(self.startY - self.rect.y) > self.maxLengthUp):
             self.yvel = -self.yvel  # если прошли максимальное растояние, то идеи в обратную сторону, вертикаль
+            A = ANIMATION_MONSTERHORYSONTAL
 
     def collide(self, platforms):
         for p in platforms:
